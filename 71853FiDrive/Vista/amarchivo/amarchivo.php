@@ -33,7 +33,7 @@ include_once '../estructura/cabeceraBT.php';
             </select><br><br>
         </div>
         <div>
-            <label for="">Seleccione tipo de archivo:</label><br>
+            <label for="">Seleccione icono que se va a utilizar:</label><br>
             <label><input type="checkbox" name="tipo1" value="imagen"> Imagen</label>
             <label><input type="checkbox" name="tipo2" value="zip"> Zip</label>
             <label><input type="checkbox" name="tipo3" value="doc"> Doc</label>
