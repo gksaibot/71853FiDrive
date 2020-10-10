@@ -4,10 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compartir Archivo</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap/bootstrapValidator.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+    
 </head>
+</script>
+<script>
+        function generarHash(){
+            var nro=Math.floor(Math.random()*101);
+            var cant=document.getElementById("cant").value;
+            var cant2=document.getElementById("cantdesc").value;
+            var cadena= nro + cant + cant2;
+            console.log
+            var cadena1="9007199254740991";
+            if ((cant=='') && (cant2=='')){
+                var hash=0;
+                for (i = 0; i< cadena1.length; i++){
+                    char =cadena1.charCodeAt(i);
+                    hash=((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+            }
+            else{
+                var hash=0;
+                for (i = 0; i< cadena.length; i++){
+                    char =cadena.charCodeAt(i);
+                    hash=((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+            }
+            document.getElementById("inputText").value=hash;
+        }
+    </script>
+    
 <?php
 include_once '../estructura/cabeceraBT.php';
 ?>
@@ -28,27 +56,29 @@ include_once '../estructura/cabeceraBT.php';
         
         <div>
             <label>Usuario: </label><br>
-            <select name="usuario" id="usuario">
+            <select name="usuario" id="usuario" required>
                 <option value="" disable selected>Elija una opcion:</option>
                 <option value="admin">Admin</option>
                 <option value="visitante">Visitante</option>
                 <option value="Root">Root</option>
             </select><br><br>
         </div>
-        <fieldset>
+        
             <label>
                 <input type="checkbox" name="subscribe" id="subscribe" checked> Proteger con Contraseña
             </label>
         
         <div class="form-group">
-            <input type="password" class="form control col-md-4" name="password" id="password" placeholder="Ingrese una contraseña" >
+            <input type="password" class="form-control col-md-6 check-seguridad" onchange="return validatePassword()" name="password" id="password" placeholder="Ingrese una contraseña" >
         </div>
         <div>
             <label for="">Link de compartir generado:</label>
-            <input type="text" readonly value="">
+            <div class="form-group">
+                <button type="button" class="btn btn-success" onclick="generarHash()">Generar Hash</button>
+                <input type="text" id="inputText" class="form-control col-md-6" readonly="readonly">
+            </div>
         </div>
-        </fieldset>
-        <div class="form-group"><button class="btn btn-success" type="submit">Generar Hash</button></div>
+        
         
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Enviar</button>
@@ -67,6 +97,22 @@ include_once '../estructura/cabeceraBT.php';
             })
         });
     </script>
+    <script>
+    $('.check-seguridad').strength({
+        templates: {
+            toggle: '<span class="input-group-addon"><span class="glyphicon glyphicon-eye-open {toggleclass}"></span>'
+        },
+
+        scoreLables: {
+            empty: 'Vacio',
+            invalid: 'Invalido',
+            weak: 'Debil',
+            good: 'Normal',
+            strong: 'Fuerte',
+        }
+    });
+    </script>
+
 </div>
 </body>
 <?php

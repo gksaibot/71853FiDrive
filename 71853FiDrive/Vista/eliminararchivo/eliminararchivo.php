@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eliminar archivo</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap/bootstrapValidator.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+    
 </head>
 <?php
 include_once '../estructura/cabeceraBT.php';
@@ -22,12 +19,12 @@ include_once '../estructura/cabeceraBT.php';
                 <input type="text" class="form-control col-md-3" id="validationCustom1" name="nombre" value="1234.png" required>
             </div>
         <div class="form-group">
-            Motivo de ya no compartir el archivo: <input type="text" name="motivo" id="motivo" class="form-control col-md-6">
+            Motivo de ya no compartir el archivo: <input type="text" name="motivo" id="motivo" class="form-control col-md-6" required>
         </div>
         
         <div>
             <label>Usuario: </label><br>
-            <select name="usuario" id="usuario">
+            <select name="usuario" id="usuario" required>
                 <option value="" disable selected>Elija una opcion:</option>
                 <option value="admin">Admin</option>
                 <option value="visitante">Visitante</option>

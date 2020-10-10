@@ -4,8 +4,29 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap CSS -->
+    
+    
+<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/all.css">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrapValidator.min.css"/>
+    
+    <!-- Javascript JS -->
+    <script type="text/javascript" src="../js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery-3.5.1.slim.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrapValidator.js"></script>-->
+    <script type="text/javascript" src="../js/validator.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
+    <!--Plugins (archivos)-->
+    <link rel="stylesheet" href="../css/strength.css">
+    <script src="../js/password_strength.js"></script>
+    <script src="../js/jquery-strength.js"></script> 
+       
+    
+    
+    
     <title><?php $Titulo?></title>
 </head>
 <body>
@@ -21,6 +42,19 @@
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="sidebar-sticky pt-3">
                 <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/PWD2020/71853FiDrive/Vista/contenido/contenido.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                            Contenido
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/PWD2020/71853FiDrive/Vista/compartidos/compartidos.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                            Compartidos
+                        </a>
+                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="/PWD2020/71853FiDrive/Vista/amarchivo/amarchivo.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>

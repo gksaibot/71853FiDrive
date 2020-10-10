@@ -13,9 +13,14 @@ include_once '../../Control/controlGral.php';
 <div class="container-fluid">    
     <?php
 
-        //$datos=data_submitted();
-        //var_dump($_POST);
+        if ($_POST['clave']=='0'){
+            $_POST['accion']='ALTA';
+        }
+        else{
+            $_POST['accion']='MODIFICACION';
+        }
         $obj=new controlGral();
+        $cargarArch=$obj->cargar_archivo($_POST['miArchivo']);
         $resp= $obj->verificarAMarchivo($_POST);
         echo $resp;
     ?>
