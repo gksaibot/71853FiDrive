@@ -2,44 +2,6 @@
 
 class controlGral {
 
-    public function verificarAMarchivo($datos){
-
-        $nom=$datos['nombre'];
-        $desc=$datos['desc'];
-        $user=$datos['usuario'];
-        $formato= '';
-        $acc=$datos['accion'];
-
-        if(isset($datos['tipo1'])){
-            
-            $formato=$formato.$datos['tipo1'];
-        }
-        if(isset($datos['tipo2'])){
-            $formato=$formato.$datos['tipo2'];
-        }
-        if(isset($datos['tipo3'])){
-            $formato=$formato.$datos['tipo3'];
-        }
-        if(isset($datos['tipo4'])){
-            $formato=$formato.$datos['tipo4'];
-        }
-        
-
-        return $resp=$nom.$desc.$user."<br>".$formato." Accion:  ".$acc;
-        
-    }
-    public function verificarCompartirarchivo($datos){
-        $contraseña='';
-        $nom=$datos['nombre'];
-        $cant=$datos['cant'];
-        $cantdesc=$datos['cantdesc'];
-        $user=$datos['usuario'];
-        if ($datos['password']!=''){
-            $contraseña=$contraseña.$datos['password'];
-        }
-        return $resp=$nom.$cant.$cantdesc.$user.$contraseña;
-        
-    }
     public function verificarEliminarCompartirarchivo($datos){
         $nom=$datos['nombre'];
         $cant=$datos['cant'];
@@ -80,41 +42,36 @@ class controlGral {
         return $msj;
     }
     public function cargar_archivo($archivo){
-        $nombre_archivo=$archivo['miArchivo']['name'];
-        $tamaño_archivo=(($archivo['miArchivo']['size']));
-        $tipo_archivo=$archivo['miArchivo']['type'];
-        $dir= '../Vista/archivos/';
-        $resp='';
-
-        if ($archivo['miArchivo']['error'] <= 0){
-            echo "Nombre: ".$nombre_archivo."<br>";
-            echo "Tipo:".$tipo_archivo."<br>";
-            echo "Tamaño:  ".$tamaño_archivo."b<br>";
-            echo "Carpeta Temporal".$archivo['miArchivo']['tmp_name']."<br>";
-            //intentamos copiar el archivo al servidor
-            $extension = substr(strrchr($nombre_archivo, "."), 1);    // Extraemos la extension del archivo
-            echo $extension .' <br>';
-            if ($extension=='txt'){
-                if(!copy($archivo['miArchivo']['tmp_name'],$dir.$nombre_archivo)){
-                        echo "ERROR: no se pudo cargar el archivo";
-                    
+            $nombre_archivo=$archivo['miArchivo']['name'];
+            $tamaño_archivo=(($archivo['miArchivo']['size']));
+            $tipo_archivo=$archivo['miArchivo']['type'];
+            $dir= '../archivos/';
+    
+            if ($archivo['miArchivo']['error'] <= 0){
+                echo "Nombre: ".$nombre_archivo."<br>";
+                echo "Tipo:".$tipo_archivo."<br>";
+                echo "Tamaño:  ".$tamaño_archivo."b<br>";
+                echo "Carpeta Temporal".$archivo['miArchivo']['tmp_name']."<br>";
+                //intentamos copiar el archivo al servidor
+                $vol_archi = round($tamaño_archivo / 1024, 2);    // Volumen archivo en Kb redondeado a dos decimales
+                $extension = substr(strrchr($nombre_archivo, "."), 1);    // Extraemos la extension del archivo
+                $volumen_max = "2000000";       // volumen maximo en bit - 5120000 = 5 MB
+                echo $extension .' <br>';
+                if (($tamaño_archivo <= $volumen_max) AND ($extension=='docx' OR $extension == 'pdf')){
+                    if(!copy($archivo['miArchivo']['tmp_name'],$dir.$archivo['miArchivo']['name'])){
+                            echo "ERROR: no se pudo cargar el archivo";
+                        
+                    }
+                    else{
+                        echo "El archivo".$archivo['miArchivo']['name'].
+                        "  Se ha copiado con EXITO <br>". "<a href='/PWD2020/71853FiDrive/Vista/archivos/$nombre_archivo'>Acceda al archivo desde aqui</a>";
+                    }
                 }
                 else{
-                    $handle = fopen($dir.$nombre_archivo, "r"); // Abris el archivo
-                    $contenido = fread ($handle, filesize ($dir.$nombre_archivo)); //Lees el archivo
-                    echo "El archivo".$archivo['miArchivo']['name'].
-                    "  Se ha copiado con EXITO <br>";
-                    $resp=$contenido;                    
+                    echo 'ERROR: el archivo es mayor a 2MB o no tiene el formato .doc o .pdf';
                 }
-            }
-            else{
-                echo 'ERROR: el archivo no tiene el formato .txt';
-            }
-
-        }
-        return $resp;
-    }
-}
     
+            }
+        }
 
-?>
+}?>

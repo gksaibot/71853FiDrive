@@ -1,13 +1,43 @@
+<?php
+
+include_once '../../configuracion.php';
+include_once '../../Control/AbmArchivoCargado.php';
+include_once '../../Modelo/archivoCargado.php';
+include_once '../../Modelo/usuario.php';
+include_once '../../Modelo/conector/BaseDatos.php';
+
+$objAbmTabla = new AbmArchivoCargado();
+$datos = data_submitted();
+print_r($datos);//id es igual a 2
+$obj1 =NULL;
+    if (isset($datos['id'])){
+        //echo "entro";
+        $listaTabla = $objAbmTabla->buscarUnarchivoCargado($datos);
+        if (count($listaTabla)==1){
+            $obj1= $listaTabla[0];
+        }
+    }
+
+?>	
+<?php
+$obj = new usuario();
+$losUsuarios =$obj->darUsuarios('');
+print_r($losUsuarios);
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compartir Archivo</title>
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<scr src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
     
 </head>
-</script>
+
 <script>
         function generarHash(){
             var nro=Math.floor(Math.random()*101);
@@ -43,9 +73,10 @@ include_once '../estructura/cabeceraBT.php';
 <div class="container-fluid">
     <h1>Compartir Archivo:</h1>
     <form class="form-group" method="POST" action="accion.php">
+    		<input id="id:" readonly name ="id" width="80" type="text" value="<?php echo $obj1->getIdarchivocargado()?>"><br/>
             <div class="form-group">
                 <label for="validationCustom1">Nombre:</label>
-                <input type="text" class="form-control col-md-3" id="validationCustom1" name="nombre" value="1234.png" required>
+                <input type="text" class="form-control col-md-3" id="validationCustom1" name="nombre" value="<?php echo $obj1->getAcnombre()?>" required>
             </div>
         <div class="form-group">
             Ingresar Cantidad de dias que se comparte el archivo: <input type="number" name="cant" id="cant" class="form-control col-md-6">
@@ -58,9 +89,9 @@ include_once '../estructura/cabeceraBT.php';
             <label>Usuario: </label><br>
             <select name="usuario" id="usuario" required>
                 <option value="" disable selected>Elija una opcion:</option>
-                <option value="admin">Admin</option>
-                <option value="visitante">Visitante</option>
-                <option value="Root">Root</option>
+                <?php foreach ($losUsuarios as $unUsuario) {?>
+                <option value="<?php echo $unUsuario->getIdusuario()?>"><?php echo $unUsuario->getUsnombre()?></option>    
+                <?php }?>
             </select><br><br>
         </div>
         

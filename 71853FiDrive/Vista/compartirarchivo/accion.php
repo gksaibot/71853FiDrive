@@ -7,17 +7,24 @@
 </head>
 <?php
 include_once '../estructura/cabeceraBT.php';
-include_once '../../Control/controlGral.php';
+include_once '../../configuracion.php';
+include_once '../../Control/AbmArchivoCargado.php';
+include_once '../../Modelo/archivoCargado.php';
+include_once '../../Modelo/usuario.php';
+include_once '../../Modelo/conector/BaseDatos.php';
 ?>
 <body>
 <div class="container-fluid">    
     <?php
 
-        //$datos=data_submitted();
-        //var_dump($_POST);
-        $obj=new controlGral();
-        $resp= $obj->verificarCompartirarchivo($_POST);
-        echo $resp;
+        $datos=data_submitted();
+        echo"##";
+        print_r($_POST);
+        echo "##";
+        $obj=new AbmArchivoCargado();
+        //print_r($datos);
+        $resp= $obj->compartirArchivo($datos);
+        
     ?>
 
 

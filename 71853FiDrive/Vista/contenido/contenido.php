@@ -1,3 +1,14 @@
+<?php
+include_once "../../configuracion.php";
+include_once '../../Control/AbmArchivoCargado.php';
+include_once '../../Modelo/archivoCargado.php';
+include_once '../../Modelo/conector/BaseDatos.php';
+$objAbmTabla = new AbmArchivoCargado();
+
+$listaTabla = $objAbmTabla->buscar(null);
+
+?>	
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,28 +41,53 @@ include_once '../estructura/cabeceraBT.php';
             
         </div>
         <h3>Listado de archivos:</h3>
+        <table class="table">
+    <?php	
+
+    if( count($listaTabla)>0){
+        foreach ($listaTabla as $objTabla) { 
+            echo '<div class="row">';
+                echo "<div class='form-group col-md-12'>";
+                        echo '<tr><td style="width:500px;">'.$objTabla->getAcnombre().'</td>';
+                        echo '<td><button class="btn btn-outline-info"><a href="../amarchivo/archivoCargadoEditar.php?accion=modificar&id='.$objTabla->getIdarchivocargado().'">Modificar</a></button></td>';
+                        echo '<td><button class="btn btn-outline-success"><a href="../compartirarchivo/compartirarchivo.php?id='.$objTabla->getIdarchivocargado().'">Compartir</a></button></td>';
+                        echo '<td><button class="btn btn-outline-warning"><a href="accion/abmTabla.php?accion=borrar&id='.$objTabla->getIdarchivocargado().'">Eliminar</a></button></td></tr>'; 
+                echo "</div>";
+            echo "</div>";
+        }
+    }
+
+    ?>
+    </table>
+
+        
         <?php
-        $listar=listar_directorios_ruta("../../archivos/");
+        //$listar=listar_directorios_ruta("../../archivos/");
         ?>
         <?php
-            function listar_directorios_ruta($ruta){
+        //    function listar_directorios_ruta($ruta){
                 // abrir un directorio y listarlo recursivo
-                if (is_dir($ruta)) {
-                    if ($dh = opendir($ruta)) {
-                        while (($file = readdir($dh)) !== false) {
+          //      if (is_dir($ruta)) {
+            //        if ($dh = opendir($ruta)) {
+              //          while (($file = readdir($dh)) !== false) {
                          //esta línea la utilizaríamos si queremos listar todo lo que hay en el directorio
                          //mostraría tanto archivos como directorios
                          //echo "<br>Nombre de archivo: $file : Es un: " . filetype($ruta . $file);
-                            if ($file!="." && $file!=".." && !(is_dir($ruta . $file))){
-                                echo "<div class='container-fluid'>
-                                        <div class='row'>
-                                            <div class='form-group col-md-12'>
-                                                <div class='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom'>
-                                                    $file
-                                                    <button class='btn btn-success'><a class='' href='amarchivo.php'>          Modificar</a></button>
-                                                    <button class='btn btn-secondary'><a class='' href='../compartirarchivo/compartirarchivo.php'>          Compartir</a></button>
-                                                    <button class='btn btn-danger'><a class='' href='../eliminararchivo/eliminararchivo.php'>          Eliminar</a></button>
-                                                
+                //            if ($file!="." && $file!=".." && !(is_dir($ruta . $file))){
+                  //              echo "<div class='container-fluid'>
+                //                        <div class='row'>
+                //                            <div class='form-group col-md-12'>
+                //                                <div class='d-flex justify-content-between pt-3 pb-2 border-bottom'>
+                //                                    $file
+                //                                    <div class='form-group'><h1></h1></div>
+                //                                    <div class='form-group'><h1></h1></div>
+                //                                    <div class='form-group'><h1></h1></div>
+                //                                    <div class='form-group'><h1></h1></div>
+                //                                    <div class='form-group'><h1></h1></div>
+                //                                    <div class='form-group'><h1></h1></div>
+                /*                                    <button class='btn btn-outline-info'><a class='' href='amarchivo.php'>          Modificar</a></button>
+                                                    <button class='btn btn-outline-success'><a class='' href='../compartirarchivo/compartirarchivo.php'>          Compartir</a></button>
+                                                    <button class='btn btn-outline-warning'><a class='' href='../eliminararchivo/eliminararchivo.php'>          Eliminar</a></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -67,8 +103,8 @@ include_once '../estructura/cabeceraBT.php';
                     }
                 }else
                     echo "<br>No es ruta valida";
-            }
-        ?>
+            }*/
+            ?>
 
     </div>
 </body>

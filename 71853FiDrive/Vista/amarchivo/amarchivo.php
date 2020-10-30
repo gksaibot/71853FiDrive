@@ -1,3 +1,27 @@
+<?php
+include_once '../../Modelo/usuario.php';
+include_once '../../Modelo/conector/BaseDatos.php';
+include_once '../../Control/AbmArchivoCargado.php';
+include_once '../../Modelo/archivoCargado.php';
+//include_once '../../configuracion.php';
+
+$obj = new usuario();
+$losUsuarios =$obj->darUsuarios('');
+$comboUsuario = "";
+if(!$losUsuarios){
+    exit("Error al consultar los usuarios");
+ }else{
+    echo "entro";
+    $comboUsuario = "<select name='usuario' required>"; //Abrimos el SELECT
+    $comboUsuario .= "<option value='-1'>Seleccionar...</option>";
+    foreach ($losUsuarios as $unUsuario) {
+      $comboUsuario.="<option value='".$unUsuario->getIdusuario()."'>".$unUsuario->getUsnombre()."</option>";
+      //$comboIdUsuario.=
+    }
+    $comboUsuario .="</select>"; //Cerramos el Select
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +33,12 @@
 </head>
 <?php
 include_once '../estructura/cabeceraBT.php';
+
+
 ?>
 <body>
 <div class="container-fluid">
-    <h2>Alta, Modificacion de archivo:</h2><br>
+    <h2>Alta, Modificacion de archivos:</h2><br>
     
     
     <form class="amarchivo" name="amarchivo" method="POST" data-toggle="validator" action="accion.php" enctype="multipart/form-data">
@@ -33,35 +59,33 @@ include_once '../estructura/cabeceraBT.php';
         </div>
         
         <div>
-            <label>Usuario: </label><br>
-            <select name="usuario" id="usuario" required>
-                <option value="" disable selected>Seleccione un operacion</option>
-                <option value="admin">Admin</option>
-                <option value="visitante">Visitante</option>
-                <option value="Root">Root</option>
-            </select><br><br>
-        </div>
+            <fieldset>
+                <legend>Usuario:</legend>
+                    <?php echo $comboUsuario ?>
+            </fieldset>
+        </div><br>
         <div>
             <label for="">Seleccione icono que se va a utilizar:</label><br>
             
-            <label><input class="tipo" type="checkbox" name="tipo1" value="imagen">  <i class="far fa-image"></i> Imagen</label>
-            <label><input class="tipo" type="checkbox" name="tipo2" value="zip">  <i class="far fa-file-archive"></i> Zip</label>
-            <label><input class="tipo" type="checkbox" name="tipo3" value="doc">  <i class="far fa-file-word"></i> Doc</label>
-            <label><input class="tipo" type="checkbox" name="tipo4" value="pdf">  <i class="far fa-file-pdf"></i> Pdf</label>
-            <label><input class="tipo" type="checkbox" name="tipo5" value="xls">  <i class="far fa-file-excel"></i> Xls</label>
+            <label><input class="tipo" type="radio" name="tipo" value="imagen">  <i class="far fa-image"></i> Imagen</label>
+            <label><input class="tipo" type="radio" name="tipo" value="zip">  <i class="far fa-file-archive"></i> Zip</label>
+            <label><input class="tipo" type="radio" name="tipo" value="doc">  <i class="far fa-file-word"></i> Doc</label>
+            <label><input class="tipo" type="radio" name="tipo" value="pdf">  <i class="far fa-file-pdf"></i> Pdf</label>
+            <label><input class="tipo" type="radio" name="tipo" value="xls">  <i class="far fa-file-excel"></i> Xls</label>
         </div><br>
         <div class="form-group">
             <label for="">Ingrese una contraseña:</label>
             <input type="text" id="clave" name="clave" class="form control col-md-4" value="0">
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Enviar</button>
+            <input id="accion" name ="accion" value="alta" type="hidden">
+			<input type="submit">
         </div>
     
     </form>
 </div>
 </body>
-<script>
+<!--<script>
 $('form').submit(function(e){
     // si la cantidad de checkboxes "chequeados" es cero,
     // entonces se evita que se envíe el formulario y se
@@ -72,7 +96,7 @@ $('form').submit(function(e){
     }
 });
 
-</script>
+</script>-->
 <?php
 include_once '../estructura/pieBT.php';
 ?>

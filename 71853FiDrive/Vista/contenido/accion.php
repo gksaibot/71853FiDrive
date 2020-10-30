@@ -34,8 +34,3 @@ include_once '../estructura/pieBT.php';
 
 
 
-
-
-
-
-
