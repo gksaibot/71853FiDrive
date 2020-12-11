@@ -8,23 +8,33 @@
 <?php
 include_once '../estructura/cabeceraBT.php';
 include_once '../../configuracion.php';
-include_once '../../Control/AbmArchivoCargado.php';
-include_once '../../Modelo/archivoCargado.php';
-include_once '../../Modelo/usuario.php';
-include_once '../../Modelo/conector/BaseDatos.php';
 ?>
 <body>
 <div class="container-fluid">    
     <?php
 
         $datos=data_submitted();
-        echo"##";
-        print_r($_POST);
-        echo "##";
+        $fechaActual=date("Y-m-d");
         $obj=new AbmArchivoCargado();
-        //print_r($datos);
+        $datos['acdescripcion']="";
+        $datos['acicono']="";
+        $datos['acfechainiciocompartir']=$fechaActual;
+        $fecha=$datos['accantidadusada'];
+        $datos['acefechafincompartir']= date("Y-m-d",strtotime($fechaActual."+ $fecha days"));
+        //echo "accion-----------";
+        //var_dump($datos);
+        $objAbmACE= new AbmArchivoCargadoEstado();
+        $objestadotipo=$objAbmACE->buscarUnEstadotipo($datos['id']);
+        $datos['idestadotipos']=$objestadotipo['0']->getIdestadotipos();
+        //echo "------------accion";
+        //var_dump($datos);
         $resp= $obj->compartirArchivo($datos);
-        
+        if ($resp){
+            echo "<h1>ARCHIVO COMPARTIDO EXITOSAMENTE</h1>";
+        }
+        else{
+            echo "ALGO FALLO NO SE PUDO COMPARTIR EL ARCHIVO";
+        }
     ?>
 
 
