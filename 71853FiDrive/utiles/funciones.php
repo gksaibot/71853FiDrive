@@ -20,12 +20,13 @@ function data_submitted() {
 
 
 spl_autoload_register(function ($clase) {
-	echo "Cargamos la clase  ".$clase."<br>" ;
+	//echo "Cargamos la clase  ".$clase."<br>" ;
 	$directorys = array(
-		$GLOBALS['ROOT'].'../Modelo/',
-		$GLOBALS['ROOT'].'../Control/',
+		$GLOBALS['ROOT'].'Modelo/',
+		$GLOBALS['ROOT'].'Modelo/conector/',
+		$GLOBALS['ROOT'].'Control/',
 	);
-   // print_r($directorys) ;
+    //print_r($directorys) ;
 	foreach($directorys as $directory){
 	  if(file_exists($directory.$clase . '.php')){  
 			  // echo "se incluyo".$directory.$class_name . '.php';
