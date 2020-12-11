@@ -2,20 +2,6 @@
 
 class controlGral {
 
-    public function verificarEliminarCompartirarchivo($datos){
-        $nom=$datos['nombre'];
-        $cant=$datos['cant'];
-        $motivo=$datos['motivo'];
-        $user=$datos['usuario'];
-        return $resp=$nom.$cant.$motivo.$user;
-    }
-    public function verificarEliminarArchivo($datos){
-        $nom=$datos['nombre'];
-        $motivo=$datos['motivo'];
-        $user=$datos['usuario'];
-        return $resp=$nom.$motivo.$user;
-    
-    }
     public function crearCarpeta($datos){
         $nomdirectorio=$datos['carpeta'];
         $msj=null;
@@ -57,7 +43,7 @@ class controlGral {
                 $extension = substr(strrchr($nombre_archivo, "."), 1);    // Extraemos la extension del archivo
                 $volumen_max = "2000000";       // volumen maximo en bit - 5120000 = 5 MB
                 echo $extension .' <br>';
-                if (($tamaño_archivo <= $volumen_max) AND ($extension=='docx' OR $extension == 'pdf')){
+                if (($tamaño_archivo <= $volumen_max) AND ($extension=='docx' OR $extension == 'pdf' OR $extension == 'jpg')){
                     if(!copy($archivo['miArchivo']['tmp_name'],$dir.$archivo['miArchivo']['name'])){
                             echo "ERROR: no se pudo cargar el archivo";
                         

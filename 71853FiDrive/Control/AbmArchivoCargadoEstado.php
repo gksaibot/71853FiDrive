@@ -10,7 +10,7 @@ public function cargarObjeto($param){
         and array_key_exists('idusuario',$param) and array_key_exists('acefechaingreso',$param) and array_key_exists('acefechafin',$param) and array_key_exists('idarchivocargado',$param)){
             $obj = new archivoCargadoEstado();
             $obj->setear($param['idarchivocargadoestado'], $param['idestadotipos'], $param['acedescripcion'], $param['idusuario'], $param['acefechaingreso'], $param['acefechafin'], $param['idarchivocargado']);
-            //echo "###";
+            //echo "###cargar objetooooo";
             //print_r($obj);
             //echo "###";
         }
@@ -96,6 +96,64 @@ public function cargarObjeto($param){
         return $resp;
     }
     
+    public function modificacionFechaFin($param){
+        $resp = false;
+        //echo "##entro modificacionFechaFin";
+        if ($this->seteadosCamposClaves($param)){
+            $param['acefechafin']=date("Y-m-d");
+            $elObjtTabla = $this->cargarObjeto($param);
+            //echo"modificacion fecha fin";
+            //var_dump($elObjtTabla);
+            if($elObjtTabla!=null and $elObjtTabla->modificar()){
+                $resp = true;
+            }
+        }
+        return $resp;
+    }
+    public function buscarUnEstadotipo($param){
+        $where = " true ";
+        $resp=false;
+        if ($param<>NULL){
+            if  (isset($param['idarchivocargadoestado']))
+                $where.=" and idestadotipos =".$param['idestadotipos'];
+            if  (isset($param['etdescripcion']))
+                 $where.=" and etdescripcion ='".$param['etdescripcion']."'";
+        }
+        $arreglo = archivoCargadoEstado::buscarEstadoTipo($param);  
+        if ($arreglo<>null)
+            $resp=true;
+        else{
+            $resp=false;
+            //echo "<br> entro a false <br>";
+        }
+        
+            
+    return $arreglo;
+        
+    }
+
+    public function buscarUnarchivoCargadoEstado($param, $idestadotipos){
+        $where = " true ";
+        $resp=false;
+        if ($param<>NULL){
+            if  (isset($param['idarchivocargadoestado']))
+                $where.=" and idestadotipos =".$param['idestadotipos'];
+            if  (isset($param['etdescripcion']))
+                 $where.=" and etdescripcion ='".$param['etdescripcion']."'";
+        }
+        $arreglo = archivoCargadoEstado::buscarArchivoCargadoEstado($param, $idestadotipos);  
+        if ($arreglo<>null)
+            $resp=true;
+        else{
+            $resp=false;
+            //echo "<br> entro a false <br>";
+        }
+        
+            
+    return $arreglo;
+        
+    }
+
     /**
      * permite buscar un objeto
      * @param array $param
