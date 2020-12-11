@@ -175,7 +175,7 @@ class BaseDatos extends PDO {
           $this->setIndice(0);
           $this->setResultado($arregloResult);
        }
-       echo " La cantidad es ".$cant;
+       //echo " La cantidad es ".$cant;
        return $cant;
        
    }

@@ -7,7 +7,6 @@
 </head>
 <?php
 include_once '../estructura/cabeceraBT.php';
-include_once '../../Control/controlGral.php';
 ?>
 <body>
 <div class="container-fluid">    
@@ -18,9 +17,11 @@ include_once '../../Control/controlGral.php';
         
         $obj=new controlGral();
         $resp= $obj->crearCarpeta($_POST);
-        echo $resp;
+        if ($resp){
+            echo "<h1> Carpeta creada exitosamente</h1>";
+        };
         ?>
-        <a class='nav-link' href='/PWD2020/71853FiDrive/Vista/contenido/contenido.php'><i class="fas fa-long-arrow-alt-left"></i>   Volver atras al Contenido</a>
+        <a class='nav-link' href='/PWD2020/71853FiDrive/Vista/contenido/contenido.php'><i class="fas fa-long-arrow-alt-left"></i>   Volver al Contenido</a>
     
 
 </div>

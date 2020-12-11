@@ -1,3 +1,16 @@
+<?php
+include_once "../../configuracion.php";
+$sesion=new Session();
+error_reporting(0);
+
+if ($sesion->activa()){
+$objAbmArchivoCargadoEstado= new AbmArchivoCargado();
+$datos['estado2']='2';
+$datos['idusuario']=$sesion->getIdusuario();
+$listaCargados= $objAbmArchivoCargadoEstado->listarArchivosCargadosEstado($datos);
+
+?>
+	
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,10 +24,41 @@ include_once '../estructura/cabeceraBT.php';
 <body>
     <div class="container-fluid">
         <h3>Listado de archivos compartidos:</h3>
-        <?php
-        $listar=listar_directorios_ruta("../../archivos/");
+        
+        <table class="table">
+        <?php	
+        echo '<thead class="thead-dark">';
+        echo '<tr>';
+        echo '<th scope="col">ID</th>';        
+        echo '<th scope="col">Nombre</th>';
+        echo '<th scope="col">Usuario</th>';
+        echo '<th scope="col">Operaciones</th>';
+        echo '<th scope="col">    </th>';
+        echo '</tr>';
+        echo '</thead>';
+
+        if( count($listaCargados)>0){
+            foreach ($listaCargados as $objAC) { 
+                echo '<div class="row">';
+                    echo "<div class='form-group col-md-12'>";
+                            echo '<tr><td style="width:500px;">'.$objAC->getIdarchivocargado().'</td>';
+                            echo '<td style="width:500px;">'.$objAC->getAcnombre().'</td>';
+                            echo '<td style="width:500px;">'.$objAC->getAcdescripcion().'</td>';
+                            echo '<td><button class="btn btn-outline-warning">
+                                        <a href="../eliminararchivocompartido/eliminararchivocompartido.php?accion=eliminar&id='.$objAC->getIdarchivocargado().'">
+                                        Dejar de compartir</a></button></td></tr>'; 
+                                                 
+                    echo "</div>";
+                echo "</div>";
+            }
+        }
+    
         ?>
+        </table>
         <?php
+        /*$listar=listar_directorios_ruta("../../archivos/");
+        
+        
             function listar_directorios_ruta($ruta){
                 // abrir un directorio y listarlo recursivo
                 if (is_dir($ruta)) {
@@ -47,6 +91,7 @@ include_once '../estructura/cabeceraBT.php';
                 }else
                     echo "<br>No es ruta valida";
             }
+            */
         ?>
 
     </div>
@@ -55,3 +100,11 @@ include_once '../estructura/cabeceraBT.php';
 include_once '../estructura/pieBT.php';
 ?>
 </html>
+<?php
+}
+else{
+    header($NOVALIDA);
+    
+}
+
+?>

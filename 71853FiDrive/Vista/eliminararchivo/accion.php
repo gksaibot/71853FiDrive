@@ -7,15 +7,33 @@
 </head>
 <?php
 include_once '../estructura/cabeceraBT.php';
-include_once '../../Control/controlGral.php';
+include_once '../../configuracion.php';
 ?>
 <body>
 <div class="container-fluid">    
     <?php
-
-        $obj=new controlGral();
-        $resp= $obj->verificarEliminarArchivo($_POST);
-        echo $resp;
+        $datos=data_submitted();
+        $fechaActual=date("Y-m-d");
+        $obj=new AbmArchivoCargado();
+        $datos['acicono']="";
+        $datos['aclinkacceso']="";
+        $datos['accantidadusada']="";
+        $datos['accantidaddescarga']="";
+        $datos['acfechainiciocompartir']=$fechaActual;
+        $datos['acefechafincompartir']=null;
+        $datos['acprotegidoclave']="";
+        //echo "accion-----------";
+        //print_r($datos);
+        //echo "------------accion";
+        
+        $resp= $obj->verificarEliminarArchivo($datos,1);
+        if ($resp){
+            echo "<h1> Archivo eliminado exitosamente</h1>";
+        }
+        else{
+            echo "<h1>Algo fallo en la eliminacion</h1>";
+        }
+        
     ?>
 
 

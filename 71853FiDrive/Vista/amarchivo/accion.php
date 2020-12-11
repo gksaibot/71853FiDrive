@@ -7,15 +7,7 @@
 </head>
 <?php
 include_once '../estructura/cabeceraBT.php';
-include_once '../../utiles/funciones.php';
-include_once '../../Control/AbmArchivoCargado.php';
-include_once '../../Control/AbmArchivoCargadoEstado.php';
-include_once '../../Control/controlGral.php';
-include_once '../../Modelo/archivoCargado.php';
-include_once '../../Modelo/archivoCargadoEstado.php';
-include_once '../../Modelo/estadoTipos.php';
-include_once '../../Modelo/conector/BaseDatos.php';
-include_once '../../Control/AbmEstadoTipos.php';
+include_once '../../configuracion.php';
 ?>
 <body>
 <div class="container-fluid">    
@@ -23,20 +15,32 @@ include_once '../../Control/AbmEstadoTipos.php';
         $datos = data_submitted();
         $resp=false;
         $obj2=new AbmArchivoCargado();
-        if ($_POST['clave']=='0'){ //alta de archivo
-            $_POST['id']=null;
+        $datos['aclinkacceso']=0;
+        $datos['accantidaddescarga']=0;
+        $datos['accantidadusada']=0;
+        $datos['acfechainiciocompartir']=null;
+        $datos['acefechafincompartir']=null;
+        $datos['acprotegidoclave']=0;
+        
+        //var_dump($datos);
+        if ($datos['clave']=='0'){ //alta de archivo
+            $datos['id']=null;
             $obj=new controlGral();
             $cargarArch=$obj->cargar_archivo($_FILES);
-            $resp= $obj2->verificarAMarchivo($_POST);
+            
+            $resp= $obj2->verificarAMarchivo($datos);
         
         }
-        else if ($_POST['clave']='1'){ //modificacion de archivo
-            if($obj2->modificacion($datos)){
+        else if ($datos['clave']='1'){ //modificacion de archivo
+            if($obj2->modificacion($_POST)){
                 $resp = true;
             }
         }
         if ($resp){
-            echo "archivo cargado correctamente en la base de datos";
+            echo "<h1>ARCHIVO CARGADO EXITOSAMENTE</h1>";
+        }
+        else{
+            echo "<h1>NO SE PUDO CARGAR EL ARCHIVO</h1>";
         }
     ?>
 
