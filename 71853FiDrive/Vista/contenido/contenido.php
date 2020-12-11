@@ -1,12 +1,33 @@
 <?php
 include_once "../../configuracion.php";
-include_once '../../Control/AbmArchivoCargado.php';
-include_once '../../Modelo/archivoCargado.php';
-include_once '../../Modelo/conector/BaseDatos.php';
+$sesion=new Session();
+error_reporting(0);
+
+if ($sesion->activa()){
+
 $objAbmTabla = new AbmArchivoCargado();
-
+$objAbmArchivoCargadoEstado= new AbmArchivoCargado();
 $listaTabla = $objAbmTabla->buscar(null);
+$datos['estado1']='1';
+$datos['estado3']='3';
+$datos['idusuario']=$sesion->getIdusuario();
+$listaCargados= $objAbmArchivoCargadoEstado->listarArchivosCargadosE($datos);
 
+//$arreglo= array();
+/*if( count($listaTabla)>0){
+    foreach ($listaTabla as $objTabla) { 
+            if ($objAbmArchivoCargadoEstado->buscarUnarchivoCargadoEstado($objTabla->getIdarchivocargado(),1)){
+                    $arregloAC=array_push($arreglo,$objTabla);//filtramos solo los Arch cargados
+                    echo "<br>entro a X<br>";
+                    
+            }
+            else{
+                echo "<br> entro a Y <br>";
+            }
+    }
+    echo "<br>$arregloAC[0]";
+    echo "------------";
+}*/
 ?>	
 
 <!DOCTYPE html>
@@ -14,7 +35,7 @@ $listaTabla = $objAbmTabla->buscar(null);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contenido</title>
 <?php
 include_once '../estructura/cabeceraBT.php';
 ?>
@@ -40,28 +61,41 @@ include_once '../estructura/cabeceraBT.php';
             </form>
             
         </div>
-        <h3>Listado de archivos:</h3>
+        <h3>Listado de Archivos Cargados:</h3>
         <table class="table">
     <?php	
+        echo '<thead class="thead-dark">';
+        echo '<tr>';
+        echo '<th scope="col">ID</th>';        
+        echo '<th scope="col">Nombre</th>';
+        echo '<th scope="col">Usuario</th>';
+        echo '<th scope="col">    </th>';
+        echo '<th scope="col">Tipo</th>';
+        echo '<th scope="col">    </th>';
+        echo '</tr>';
+        echo '</thead>';
 
-    if( count($listaTabla)>0){
-        foreach ($listaTabla as $objTabla) { 
-            echo '<div class="row">';
-                echo "<div class='form-group col-md-12'>";
-                        echo '<tr><td style="width:500px;">'.$objTabla->getAcnombre().'</td>';
-                        echo '<td><button class="btn btn-outline-info"><a href="../amarchivo/archivoCargadoEditar.php?accion=modificar&id='.$objTabla->getIdarchivocargado().'">Modificar</a></button></td>';
-                        echo '<td><button class="btn btn-outline-success"><a href="../compartirarchivo/compartirarchivo.php?id='.$objTabla->getIdarchivocargado().'">Compartir</a></button></td>';
-                        echo '<td><button class="btn btn-outline-warning"><a href="accion/abmTabla.php?accion=borrar&id='.$objTabla->getIdarchivocargado().'">Eliminar</a></button></td></tr>'; 
-                echo "</div>";
-            echo "</div>";
+    if( count($listaCargados)>0){
+        foreach ($listaCargados as $objAC) { 
+            //var_dump($objAC);
+            //echo '<div class="row">';
+            //    echo "<div class='form-group col-md-12'>";
+                        echo '<tr><td style="width:500px;">'.$objAC->getIdarchivocargado().'</td>';
+                        echo '<td style="width:500px;">'.$objAC->getAcnombre().'</td>';
+                        echo '<td style="width:500px;">'.$objAC->getAcdescripcion().'</td>';
+                        echo '<td><button class="btn btn-outline-info"><a href="../amarchivo/archivoCargadoEditar.php?accion=modificar&id='.$objAC->getIdarchivocargado().'">Modificar</a></button></td>';
+                        echo '<td><button class="btn btn-outline-success"><a href="../compartirarchivo/compartirarchivo.php?$datos&id='.$objAC->getIdarchivocargado().'">Compartir</a></button></td>';
+                        echo '<td><button class="btn btn-outline-warning"><a href="../eliminararchivo/eliminararchivo.php?accion=eliminar&id='.$objAC->getIdarchivocargado().'">Eliminar</a></button></td></tr>'; 
+            //    echo "</div>";
+            //echo "</div>";
         }
+    }else{
+        
     }
 
     ?>
     </table>
-
-        
-        <?php
+      <?php
         //$listar=listar_directorios_ruta("../../archivos/");
         ?>
         <?php
@@ -110,5 +144,13 @@ include_once '../estructura/cabeceraBT.php';
 </body>
 <?php
 include_once '../estructura/pieBT.php';
+
 ?>
 </html>
+<?php
+}
+else{
+    header($NOVALIDA);
+    
+}
+?>
