@@ -1,11 +1,11 @@
 <?php
-include_once '../../Modelo/usuario.php';
-include_once '../../Modelo/conector/BaseDatos.php';
-include_once '../../Control/AbmArchivoCargado.php';
-include_once '../../Modelo/archivoCargado.php';
-//include_once '../../configuracion.php';
+include_once '../../configuracion.php';
 
-$obj = new usuario();
+$sesion=new Session();
+error_reporting(0);
+if ($sesion->activa()){;
+//$sesion->session__started();
+/*$obj = new usuario();
 $losUsuarios =$obj->darUsuarios('');
 $comboUsuario = "";
 if(!$losUsuarios){
@@ -19,8 +19,9 @@ if(!$losUsuarios){
       //$comboIdUsuario.=
     }
     $comboUsuario .="</select>"; //Cerramos el Select
-  }
+  }*/
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,33 +50,40 @@ include_once '../estructura/cabeceraBT.php';
     
         <div class="form-group">
                 <label for="validationCustom1">Nombre:</label>
-                <input type="text" class="form-control col-md-3" id="nombre" name="nombre" value="1234.png" required>
+                <input type="text" class="form-control col-md-3" id="acnombre" name="acnombre" value="1234.png" required>
         </div>
         <div class="valid-feedback">Muy Bien
             </div>
 
         <div class="form-group">
-            Descripcion: <textarea name="desc" class="ckeditor" cols="30" rows="10"><?php echo "Esta es una descripcion generica, si lo necesita la puede cambiar." ?></textarea>
+            Descripcion: <textarea name="acdescripcion" class="ckeditor" cols="30" rows="10"><?php echo "Esta es una descripcion generica, si lo necesita la puede cambiar." ?></textarea>
         </div>
         
         <div>
-            <fieldset>
-                <legend>Usuario:</legend>
-                    <?php echo $comboUsuario ?>
-            </fieldset>
-        </div><br>
+            <label>Usuario: </label><br>
+            <select name="idusuario" id="idusuario">
+                <option value="<?php echo $sesion->getIdusuario()?>" selected><?php echo $sesion->getUslogin() ?></option>
+            </select><br>
+            <!--<label>Usuario: </label><br>
+            <select name="idusuario" id="idusuario" required>
+                <option value="" disable selected>Elija una opcion:</option>
+                <?php //foreach ($losUsuarios as $unUsuario) {?>
+                <option value="<?php //echo $unUsuario->getIdusuario()?>"><?php //echo $unUsuario->getUsnombre()?></option>    
+                <?php //}?>
+            </select><br><br>-->
+        </div>
         <div>
             <label for="">Seleccione icono que se va a utilizar:</label><br>
             
-            <label><input class="tipo" type="radio" name="tipo" value="imagen">  <i class="far fa-image"></i> Imagen</label>
-            <label><input class="tipo" type="radio" name="tipo" value="zip">  <i class="far fa-file-archive"></i> Zip</label>
-            <label><input class="tipo" type="radio" name="tipo" value="doc">  <i class="far fa-file-word"></i> Doc</label>
-            <label><input class="tipo" type="radio" name="tipo" value="pdf">  <i class="far fa-file-pdf"></i> Pdf</label>
-            <label><input class="tipo" type="radio" name="tipo" value="xls">  <i class="far fa-file-excel"></i> Xls</label>
+            <label><input class="tipo" type="radio" name="acicono" value="imagen">  <i class="far fa-image"></i> Imagen</label>
+            <label><input class="tipo" type="radio" name="acicono" value="zip">  <i class="far fa-file-archive"></i> Zip</label>
+            <label><input class="tipo" type="radio" name="acicono" value="doc">  <i class="far fa-file-word"></i> Doc</label>
+            <label><input class="tipo" type="radio" name="acicono" value="pdf">  <i class="far fa-file-pdf"></i> Pdf</label>
+            <label><input class="tipo" type="radio" name="acicono" value="xls">  <i class="far fa-file-excel"></i> Xls</label>
         </div><br>
         <div class="form-group">
-            <label for="">Ingrese una contraseña:</label>
-            <input type="text" id="clave" name="clave" class="form control col-md-4" value="0">
+            <!--<label for="">Ingrese una contraseña:</label>-->
+            <input type="hidden" id="clave" name="clave" class="form control col-md-4" value="0">
         </div>
         <div class="form-group">
             <input id="accion" name ="accion" value="alta" type="hidden">
@@ -101,3 +109,11 @@ $('form').submit(function(e){
 include_once '../estructura/pieBT.php';
 ?>
 </html>
+<?php 
+}
+else{
+    header($NOVALIDA);
+    
+}
+
+ ?>

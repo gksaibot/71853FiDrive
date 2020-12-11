@@ -1,18 +1,15 @@
 <?php
 include_once '../../configuracion.php';
-include_once '../../Control/AbmArchivoCargado.php';
-include_once '../../Modelo/archivoCargado.php';
-include_once '../../Modelo/usuario.php';
-include_once '../../Modelo/conector/BaseDatos.php';
-
-$obj = new usuario();
-$losUsuarios =$obj->darUsuarios('');
-
+//$obj = new usuario();
+//$losUsuarios =$obj->darUsuarios('');
+$sesion=new Session();
+error_reporting(0);
+if ($sesion->activa()){
 ?>
 <?php
 $objAbmTabla = new AbmArchivoCargado();
 $datos = data_submitted();
-print_r($datos);//id es igual a 2
+//print_r($datos);//id es igual a 2
 $obj =NULL;
     if (isset($datos['id'])){
         //echo "entro";
@@ -39,41 +36,46 @@ include_once '../estructura/cabeceraBT.php';
 <div class="container-fluid">
 	<?php if ($obj!=null){?>
 		<form method="post" action="accion.php">
-			<label>ID</label><br/>
-			<input id="id:" readonly name ="id" width="80" type="text" value="<?php echo $obj->getIdarchivocargado()?>"><br/>
+			<!--<label>ID</label><br/>-->
+			<input id="id:" readonly name ="id" width="80" type="hidden" value="<?php echo $obj->getIdarchivocargado()?>"><br/>
 		<div class="form-group">
 			<label>Nombre:</label><br/>
-			<input type="text" class="form-control col-md-3" id="nombre" name="nombre" value="<?php echo $obj->getAcnombre()?>" required>
+			<input type="text" class="form-control col-md-3" id="acnombre" name="acnombre" value="<?php echo $obj->getAcnombre()?>" required>
 		</div>
 		<div class="form-group">
-				Descripcion: <textarea name="desc" class="ckeditor" cols="30" rows="10"><?php echo $obj->getAcdescripcion() ?></textarea>
+				Descripcion: <textarea name="acdescripcion" class="ckeditor" cols="30" rows="10"><?php echo $obj->getAcdescripcion() ?></textarea>
 		</div>
 		
 		<div class="form-group">
-		
+        
             <label>Usuario: </label><br>
-            <select name="usuario" id="usuario" required>
+            <select name="idusuario" id="idusuario" required>
+            <option value="<?php echo $sesion->getIdusuario()?>" selected><?php echo $sesion->getUslogin() ?></option>
+            </select><br>
+            
+            <!--<label>Usuario: </label><br>
+            <select name="idusuario" id="idusuario" required>
                 <option value="" disable selected>Elija una opcion:</option>
                 <?php foreach ($losUsuarios as $unUsuario) {?>
                 <option value="<?php echo $unUsuario->getIdusuario()?>"><?php echo $unUsuario->getUsnombre()?></option>    
                 <?php }?>
-            </select><br><br>
+            </select><br><br>-->
         </div><br>
 		<div>
             <label for="">Seleccione icono que se va a utilizar:</label><br>
             
-            <label><input class="tipo" type="radio" name="tipo" value="imagen">  <i class="far fa-image"></i> Imagen</label>
-            <label><input class="tipo" type="radio" name="tipo" value="zip">  <i class="far fa-file-archive"></i> Zip</label>
-            <label><input class="tipo" type="radio" name="tipo" value="doc">  <i class="far fa-file-word"></i> Doc</label>
-            <label><input class="tipo" type="radio" name="tipo" value="pdf">  <i class="far fa-file-pdf"></i> Pdf</label>
-            <label><input class="tipo" type="radio" name="tipo" value="xls">  <i class="far fa-file-excel"></i> Xls</label>
+            <label><input class="tipo" type="radio" name="acicono" value="imagen">  <i class="far fa-image"></i> Imagen</label>
+            <label><input class="tipo" type="radio" name="acicono" value="zip">  <i class="far fa-file-archive"></i> Zip</label>
+            <label><input class="tipo" type="radio" name="acicono" value="doc">  <i class="far fa-file-word"></i> Doc</label>
+            <label><input class="tipo" type="radio" name="acicono" value="pdf">  <i class="far fa-file-pdf"></i> Pdf</label>
+            <label><input class="tipo" type="radio" name="acicono" value="xls">  <i class="far fa-file-excel"></i> Xls</label>
         </div><br>
         
 			
 		
 		<div class="form-group">
-            <label for="">Ingrese una contraseña:</label>
-            <input type="text" readonly id="clave" name="clave" class="form control col-md-4" value="1">
+            <!--<label for="">Ingrese una contraseña:</label>-->
+            <input type="hidden" readonly id="clave" name="clave" class="form control col-md-4" value="1">
         </div>
         
         <div class="form-group">
@@ -95,3 +97,11 @@ include_once '../estructura/pieBT.php';
 ?>
 </body>
 </html>
+<?php
+}
+else{
+    header($NOVALIDA);
+    
+}
+
+?>
