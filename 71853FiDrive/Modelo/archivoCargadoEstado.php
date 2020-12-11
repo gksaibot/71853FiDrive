@@ -200,7 +200,7 @@ public function insertar(){
     $sql="INSERT INTO archivocargadoestado(idarchivocargadoestado,idestadotipos,acedescripcion,idusuario,acefechaingreso,acefechafin,idarchivocargado)
       VALUES('".$this->getIdarchivocargadoestado()."','".$this->getIdestadotipos()."', '".$this->getAcedescripcion()."', '".$this->getIdusuario()."', '".$this->getAcefechaingreso()."', 
       '".$this->getAcefechafin()."', '".$this->getIdarchivocargado()."');";
-      echo $sql;
+      //echo $sql;
     if ($base->Iniciar()) {
         if ($elid = $base->Ejecutar($sql)) {
             //echo "entro a set id ace";
@@ -221,7 +221,8 @@ public function insertar(){
 public function modificar(){
     $resp = false;
     $base=new BaseDatos();
-    $sql="UPDATE archivocargadoestado SET acedescripcion='".$this->getAcedescripcion()."' WHERE idarchivocargadoestado=".$this->getIdarchivocargadoestado();
+    $sql="UPDATE archivocargadoestado SET acefechafin='".$this->getAcefechafin()."' WHERE idarchivocargado=".$this->getIdarchivocargado();
+    //echo "$sql";
     if ($base->Iniciar()) {
         if ($base->Ejecutar($sql)) {
             $resp = true;
@@ -275,15 +276,17 @@ public static function listar($parametro=""){
     }
     return $arreglo;
 }
-public static function buscarArchivoCargadoEstado($idarchivocargado){
+public static function buscarArchivoCargadoEstado($idarchivocargado,$idestadotipos){
     $arreglo = array();
     $base=new BaseDatos();
-    
-    $sql="SELECT * FROM `archivocargadoestado` WHERE acefechafin = '0000-00-00 00:00:00' AND idarchivocargado = '$idarchivocargado'";
+    //var_dump($idestadotipos);
+    $sql="SELECT * FROM `archivocargadoestado` WHERE acefechafin = '0000-00-00 00:00:00' AND idestadotipos = '$idestadotipos' 
+    AND idarchivocargado='$idarchivocargado'";
     //if ($parametro!="") {
     //    $sql.='WHERE acnombre ='."$parametro";
     //}
-    echo "$sql";
+    //echo "$sql";
+    //echo "buscarArchivoCargadoEstado";
     $res = $base->Ejecutar($sql);
     if($res>-1){
         if($res>0){
@@ -303,6 +306,39 @@ public static function buscarArchivoCargadoEstado($idarchivocargado){
     //print_r($arreglo);
     return $arreglo;
 }
+public static function buscarestadotipo($idarchivocargado){
+    
+    $arreglo = array();
+    $base=new BaseDatos();
+    //var_dump($idestadotipos);
+    $sql="SELECT * FROM archivocargadoestado WHERE acefechafin='0000-00-00 00:00:00' AND idarchivocargado = '$idarchivocargado'";
+    //if ($parametro!="") {
+    //    $sql.='WHERE acnombre ='."$parametro";
+    //}
+    //echo "$sql";
+    //echo "buscarArchivoCargadoEstado";
+    $res = $base->Ejecutar($sql);
+    if($res>-1){
+        if($res>0){
+            
+            while ($row = $base->Registro()){
+                $obj= new archivoCargadoEstado();
+                $obj->setear($row['idarchivocargadoestado'], $row['idestadotipos'], $row['acedescripcion'], 
+                $row['idusuario'], $row['acefechaingreso'], $row['acefechafin'], $row['idarchivocargado']);
+                array_push($arreglo, $obj);
+            }
+        
+        }
+        
+    } else {
+        //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+    }
+    //print_r($arreglo);
+    return $arreglo;
+
+
+}
+
 public static function buscar($idarchivocargadoestado){
     $base= new BaseDatos();
     $consulta="SELECT * FROM archivocargadoestado WHERE `idarchivocargadoestado` = '$idarchivocargadoestado'";

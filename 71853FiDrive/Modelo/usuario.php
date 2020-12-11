@@ -27,6 +27,29 @@ class usuario{
         $this->setUsactivo($usactivo);
         
     }
+    public static function verificarUsuario($nombreLogin,$contraseña){
+        $arreglo = array();
+        $base=new BaseDatos();
+        $sql="SELECT * FROM usuario WHERE '$nombreLogin' = uslogin AND usclave ='$contraseña'";
+        //echo $sql;
+        $res = $base->Ejecutar($sql);
+        if($res>-1){
+            if($res>0){
+                
+                while ($row = $base->Registro()){
+                    $obj= new Usuario();
+                    $obj->setear($row['idusuario'], $row['usnombre'], $row['usapellido'], $row['uslogin'], $row['usclave']
+                    , $row['usactivo']);
+                    array_push($arreglo, $obj);
+                }
+               
+            }
+            
+        } else {
+            //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+        }
+        return $arreglo;
+    }
 
     public static function darUsuarios($parametro=""){
         $arreglo = array();
@@ -51,6 +74,7 @@ class usuario{
         } else {
             //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
         }
+        
         return $arreglo;
     }
     
@@ -173,7 +197,135 @@ class usuario{
 
         return $this;
     }
+    public function obtenerUltimoID(){
+        $arreglo = array();
+        $base=new BaseDatos();
+        
+        $sql="SELECT * FROM usuario WHERE idusuario = (SELECT MAX( idusuario ) FROM usuario )";
+        //if ($parametro!="") {
+        //    $sql.='WHERE acnombre ='."$parametro";
+        //}
+        //echo "$sql";
+        $res = $base->Ejecutar($sql);
+        if($res>-1){
+            if($res>0){
+                
+                while ($row = $base->Registro()){
+                    $obj= new usuario();
+                    $obj->setear($row['idusuario'], $row['usnombre'], $row['usapellido'], 
+                    $row['uslogin'], $row['usclave'], $row['usactivo']);
+                    array_push($arreglo, $obj);
+                }
+            
+            }
+            
+        } else {
+            //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+        }
+        //print_r($arreglo);
+        return $arreglo;
+    
+    }
+    public function insertar(){
+        $resp = false;
+    $base=new BaseDatos();
+    $sql="INSERT INTO usuario(idusuario,usnombre,usapellido,uslogin,usclave,usactivo) VALUES('".$this->getIdusuario()."','".$this->getUsnombre()."', '".$this->getUsapellido()."',
+     '".$this->getUslogin()."', '".md5($this->getUsclave())."', '".$this->getUsactivo()."');";
+    if ($base->Iniciar()) {
+        if ($elid = $base->Ejecutar($sql)) {
+            $this->setIdusuario($elid);
+            $resp = true;
+        } else {
+            echo "error";
+            //$this->setmensajeoperacion("Tabla->insertar: ".$base->getError());
+        }
+    } else {
+        echo "error 2";
+        //$this->setmensajeoperacion("Tabla->insertar: ".$base->getError());
+    }
+    
+    return $resp;
+    }
+    public function modificar(){
+        $resp = false;
+    $base=new BaseDatos();
+    $sql="UPDATE usuario SET usnombre='".$this->getUsnombre()."',usapellido='".$this->getUsapellido()."',
+    idusuario='".$this->getIdusuario()."',uslogin='".$this->getUslogin()."',usclave='".$this->getUsclave()."' WHERE idusuario=".$this->getIdusuario();
+    //echo "$sql";
+    
+    if ($base->Iniciar()) {
+        if ($base->Ejecutar($sql)) {
+            $resp = true;
+        } else {
+            //$this->setmensajeoperacion("Tabla->modificar: ".$base->getError());
+        }
+    } else {
+        //$this->setmensajeoperacion("Tabla->modificar: ".$base->getError());
+    }
+    return $resp;
+    }
+    public function modificarUsuarioAct(){
+        $resp = false;
+    $base=new BaseDatos();
+    $sql="UPDATE usuario SET usactivo='".$this->getUsactivo()."' WHERE idusuario=".$this->getIdusuario();
+    //echo "$sql";
+    
+    if ($base->Iniciar()) {
+        if ($base->Ejecutar($sql)) {
+            $resp = true;
+        } else {
+            //$this->setmensajeoperacion("Tabla->modificar: ".$base->getError());
+        }
+    } else {
+        //$this->setmensajeoperacion("Tabla->modificar: ".$base->getError());
+    }
+    return $resp;
+    }
+    
+    public function eliminar(){
+        $resp = false;
+    $base=new BaseDatos();
+    $sql="DELETE FROM usuario WHERE idusuario=".$this->getIdusuario();
+    if ($base->Iniciar()) {
+        if ($base->Ejecutar($sql)) {
+            return true;
+        } else {
+            //$this->setmensajeoperacion("Tabla->eliminar: ".$base->getError());
+        }
+    } else {
+        //$this->setmensajeoperacion("Tabla->eliminar: ".$base->getError());
+    }
+    return $resp;
+    }
+    public static function buscarUsuarioCargado($idusuariocargado){
+        $arreglo = array();
+        $base=new BaseDatos();
+        
+        $sql="SELECT * FROM `usuario` WHERE idusuario = '$idusuariocargado'";
+        //if ($parametro!="") {
+        //    $sql.='WHERE acnombre ='."$parametro";
+        //}
+        //echo "$sql";
+        $res = $base->Ejecutar($sql);
+        if($res>-1){
+            if($res>0){
+                
+                while ($row = $base->Registro()){
+                    $obj= new usuario();
+                    $obj->setear($row['idusuario'], $row['usnombre'], $row['usapellido'], 
+                    $row['uslogin'], $row['usclave'], $row['usactivo']);
+                    array_push($arreglo, $obj);
+                }
+            
+            }
+            
+        } else {
+            //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+        }
+        //print_r($arreglo);
+        return $arreglo;
+    }
 }
-
+    
 
 ?>

@@ -296,7 +296,7 @@ public function insertar(){
     $resp = false;
     $base=new BaseDatos();
     $sql="INSERT INTO archivocargado(idarchivocargado,acnombre,acdescripcion,acicono,idusuario,aclinkacceso,accantidaddescarga,accantidadusada,acfechainiciocompartir,acefechafincompartir,acprotegidoclave)
-      VALUES('".$this->getIdarchivocargado()."','".$this->getAcnombre()."', '".$this->getAcdescripcion()."', '".$this->getAcdescripcion()."', '".$this->getIdusuario()."', '".$this->getAclinkacceso()."', 
+      VALUES('".$this->getIdarchivocargado()."','".$this->getAcnombre()."', '".$this->getAcdescripcion()."', '".$this->getAcicono()."', '".$this->getIdusuario()."', '".$this->getAclinkacceso()."', 
       '".$this->getAccantidaddescarga()."', '".$this->getAccantidadusada()."', '".$this->getAcfechainiciocompartir()."', '".$this->getAcefechafincompartir()."', '".$this->getAcprotegidoclave()."');";
     if ($base->Iniciar()) {
         if ($elid = $base->Ejecutar($sql)) {
@@ -313,12 +313,32 @@ public function insertar(){
     
     return $resp;
 }
+public function compartirmodificar(){
+    $resp = false;
+    
+    $base=new BaseDatos();
+    $sql="UPDATE archivocargado SET aclinkacceso='".$this->getAclinkacceso()."',accantidaddescarga='".$this->getAccantidaddescarga()."',
+    acefechafincompartir='".$this->getAcefechafincompartir()."',accantidadusada='".$this->getAccantidadusada()."' WHERE idarchivocargado=".$this->getIdarchivocargado();
+    if ($base->Iniciar()) {
+        if ($base->Ejecutar($sql)) {
+            $resp = true;
+        } else {
+            //$this->setmensajeoperacion("Tabla->modificar: ".$base->getError());
+        }
+    } else {
+        //$this->setmensajeoperacion("Tabla->modificar: ".$base->getError());
+    }
+    //var_dump($resp);
+    return $resp;
+}
 
 public function modificar(){
     $resp = false;
     $base=new BaseDatos();
     $sql="UPDATE archivocargado SET acnombre='".$this->getAcnombre()."',acdescripcion='".$this->getAcdescripcion()."',
-    idusuario='".$this->getIdusuario()."' WHERE idarchivocargado=".$this->getIdarchivocargado();
+    idusuario='".$this->getIdusuario()."',acicono='".$this->getAcicono()."',acfechainiciocompartir='0000-00-00 00:00' WHERE idarchivocargado=".$this->getIdarchivocargado();
+    //echo "$sql";
+    
     if ($base->Iniciar()) {
         if ($base->Ejecutar($sql)) {
             $resp = true;
@@ -346,6 +366,71 @@ public function eliminar(){
     }
     return $resp;
 }
+public static function listadoArchivosCargadosE($datos){
+    $idusuario=$datos['idusuario'];
+    $estadocargado=$datos['estado1'];
+    $estadonocompartido=$datos['estado3'];
+    $arreglo = array();
+    $base=new BaseDatos();
+    $sql="SELECT archivocargado.idarchivocargado,acnombre,usuario.uslogin,archivocargado.idusuario FROM `archivocargado` INNER JOIN archivocargadoestado 
+    ON archivocargadoestado.idarchivocargado=archivocargado.idarchivocargado AND acefechafin='0000-00-00 00:00' AND idestadotipos IN ($estadocargado,$estadonocompartido) 
+    INNER JOIN usuario ON archivocargado.idusuario=usuario.idusuario AND usuario.idusuario=$idusuario";
+    //if ($parametro!="") {
+    //    $sql.='WHERE acnombre ='."$parametro";
+    //}
+    //echo "$sql";
+    $res = $base->Ejecutar($sql);
+    if($res>-1){
+        if($res>0){
+            
+            while ($row = $base->Registro()){
+                $obj= new archivoCargado();
+                $obj->setear($row['idarchivocargado'], $row['acnombre'], $row['uslogin'], null, $row['idusuario'] 
+                , null, null, null, null, null, null);
+                array_push($arreglo, $obj);
+            }
+        
+        }
+        
+    } else {
+        //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+    }
+    return $arreglo;
+}
+
+public static function listadoArchivosCargadosEstado($datos){
+    $idusuario=$datos['idusuario'];
+    $estadocompartido=$datos['estado2'];
+    //var_dump($datos);
+    $arreglo = array();
+    $base=new BaseDatos();
+    
+    $sql="SELECT archivocargado.idarchivocargado,acnombre,archivocargado.idusuario,usuario.uslogin,archivocargadoestado.idestadotipos FROM `archivocargado` INNER JOIN archivocargadoestado 
+    ON archivocargadoestado.idarchivocargado=archivocargado.idarchivocargado AND idestadotipos=$estadocompartido AND acefechafin='0000-00-00 00:00'
+    INNER JOIN usuario ON archivocargado.idusuario=usuario.idusuario AND usuario.idusuario=$idusuario";
+    //if ($parametro!="") {
+    //    $sql.='WHERE acnombre ='."$parametro";
+    //}
+    //echo "$sql";
+    $res = $base->Ejecutar($sql);
+    if($res>-1){
+        if($res>0){
+            
+            while ($row = $base->Registro()){
+                $obj= new archivoCargado();
+                $obj->setear($row['idarchivocargado'], $row['acnombre'], $row['uslogin'], null, $row['idusuario'] 
+                , null, null, null, null, null, null);
+                array_push($arreglo, $obj);
+            }
+        
+        }
+        
+    } else {
+        //$this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+    }
+    return $arreglo;
+}
+
 
 public static function listar($parametro=""){
     $arreglo = array();
@@ -381,7 +466,7 @@ public static function listar($parametro=""){
         //if ($parametro!="") {
         //    $sql.='WHERE acnombre ='."$parametro";
         //}
-        echo "$sql";
+        //echo "$sql";
         $res = $base->Ejecutar($sql);
         if($res>-1){
             if($res>0){
